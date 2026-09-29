@@ -26,8 +26,12 @@ body{margin:0;min-height:100svh;display:grid;place-items:center;background:#1e24
 @keyframes return-piece{0%{transform:translate(var(--dx),var(--dy)) scale(.24)}100%{transform:translate(0,0) scale(1)}}
 @keyframes clear-burst{0%{opacity:0;transform:scale(.45)}18%{opacity:1;transform:scale(1)}60%{opacity:.85;transform:scale(1.08)}100%{opacity:0;transform:scale(1.2)}}
 @keyframes clear-ring{0%{opacity:0;transform:scale(.75)}25%{opacity:.8}100%{opacity:0;transform:scale(1.3)}}
-.congrats{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:#1e2430e8;color:#76dfd0;cursor:default;pointer-events:auto;animation:congrats-in .75s ease-out .65s both}
-.congrats[hidden]{display:none}.congrats-label{font-size:clamp(24px,5vw,54px);font-weight:900;letter-spacing:.025em;white-space:nowrap;text-shadow:0 0 25px #76dfd085}
+.congrats{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:#1e2430;color:#76dfd0;cursor:default;pointer-events:auto}
+.congrats[hidden]{display:none}.congrats-label{font-size:clamp(24px,5vw,54px);font-weight:900;letter-spacing:.025em;white-space:nowrap}
+.share-button{height:44px;min-width:148px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 16px;border:1px solid #858d97;border-radius:8px;background:transparent;color:#f4f0e6;font:600 14px/1 system-ui,-apple-system,sans-serif;text-decoration:none;white-space:nowrap;cursor:pointer}
+.share-button:hover{background:#303947;border-color:#bac3cc}
+.share-button:focus-visible{outline:2px solid #76dfd0;outline-offset:3px}
+.x-mark{font-size:20px;font-weight:500;line-height:1}
 
 .knife-break{--knife-art:url("../images/knife-break.png");position:fixed;inset:0;z-index:4;display:grid;place-items:center;background:#1e2430b3;pointer-events:auto;animation:break-backdrop 1.05s ease-in-out both}
 .knife-break[hidden]{display:none}.knife-break-art{position:relative;width:192px;height:192px;filter:drop-shadow(0 13px 12px #0008)}
@@ -39,6 +43,5 @@ body{margin:0;min-height:100svh;display:grid;place-items:center;background:#1e24
 @keyframes blade-fall{0%,18%{transform:translate(0,0) rotate(0)}62%,100%{transform:translate(-30px,-34px) rotate(-18deg)}}
 @keyframes handle-fall{0%,18%{transform:translate(0,0) rotate(0)}62%,100%{transform:translate(31px,35px) rotate(18deg)}}
 @keyframes spark-flash{0%,18%,100%{opacity:0;scale:.2}30%{opacity:1;scale:1.3}52%{opacity:0;scale:1.8}}
-@keyframes congrats-in{0%{opacity:0;background:#76dfd020}35%{opacity:1;background:#76dfd03b}100%{opacity:1;background:#1e2430e8}}
-@media(max-width:600px){.game{padding:16px 5px}.hud{padding:0 12px}.stage{font-size:24px}.stage small{font-size:12px}.reset{width:38px;height:38px}.reset svg{width:22px;height:22px}}
+@media(max-width:600px){.game{padding:16px 5px}.hud{padding:0 12px}.stage{font-size:24px}.stage small{font-size:12px}.reset{width:38px;height:38px}.reset svg{width:22px;height:22px}.congrats{gap:20px}.share-button{height:38px;min-width:0;padding:0 13px;font-size:12px;gap:7px}.x-mark{font-size:17px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.knife-half.blade{transform:translate(-30px,-34px) rotate(-18deg)}.knife-half.handle{transform:translate(31px,35px) rotate(18deg)}.break-spark,.damage-image,.clear-burst,.clear-ring{opacity:0}}

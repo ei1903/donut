@@ -29,7 +29,10 @@
     <svg class="board" id="board" viewBox="0 0 900 600" role="img" aria-label="ドーナツを切り、ピースを顔へドラッグ" tabindex="0">
       <g id="people"></g><g id="marks"></g><g id="pieces"></g><g id="guide"></g><g id="effects"></g><g id="celebration"></g>
     </svg>
-    <div class="congrats" id="congrats" role="status" hidden><span class="congrats-label">Congratulations!</span></div>
+    <div class="congrats" id="congrats" hidden>
+      <span class="congrats-label" role="status">Congratulations!</span>
+      <a class="share-button" id="share-x" href="https://x.com/intent/tweet" target="_blank" rel="noopener noreferrer" aria-label="Xでシェア"><span class="x-mark" aria-hidden="true">𝕏</span><span>Xでシェア</span></a>
+    </div>
   </div>
   <div class="knife-break" id="knife-break" role="img" aria-label="ナイフが折れた" hidden><div class="knife-break-art"><div class="knife-half blade"></div><div class="knife-half handle"></div><span class="break-spark" aria-hidden="true">✦</span></div></div>
 </main>
