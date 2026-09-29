@@ -3,12 +3,12 @@
 const N_VALUES=[1,2,2,2,4],M_VALUES=[1,1,2,3,5];
 const stages=N_VALUES.map((n,i)=>({n,m:M_VALUES[i]}));
 // Face order: upper left, lower left, upper right, lower right.
-// Each piece follows the original ring clockwise; the first one wraps past 12 o'clock.
+// Each piece follows the original ring clockwise; the last one wraps past 12 o'clock.
 stages.at(-1).initialPieces=[
- {who:0,start:17,end:23}, // purple x3, yellow x3
- {who:2,start:3,end:8},   // yellow x1, red x4
- {who:3,start:8,end:15},  // green x4, blue x3
- {who:1,start:15,end:17}  // blue x1, purple x1
+ {who:0,start:1,end:5},   // yellow x3, red x1
+ {who:2,start:5,end:9},   // red x3, green x1
+ {who:3,start:9,end:13},  // green x3, blue x1
+ {who:1,start:13,end:21}  // blue x3, purple x4, yellow x1
 ];
 function minimumCuts(n,m){if(n===1)return 0;if(m===1)return n;if(n===2)return m+(m%2);return m*(n-1)}
 function minimumCutsWithInitialPieces({n,m,initialPieces}){
