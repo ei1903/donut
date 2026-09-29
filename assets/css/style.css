@@ -1,0 +1,44 @@
+:root{color-scheme:dark;font-family:system-ui,-apple-system,sans-serif;background:#1e2430;color:#f4f0e6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;display:grid;place-items:center;background:#1e2430}
+.game{position:relative;width:min(100%,1020px);min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 15px}
+.hud{width:min(100%,900px,calc(150svh - 192px));display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:12px}
+.board-wrap{position:relative;width:min(100%,900px,calc(150svh - 192px));aspect-ratio:3/2;flex:none}
+.stage{display:flex;align-items:baseline;gap:6px;font-size:28px;font-weight:800;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.stage small{font-size:14px;font-weight:600;color:#8c929c;letter-spacing:0}
+.reset{width:42px;height:42px;display:grid;place-items:center;border:1px solid #56606d;border-radius:50%;background:transparent;color:#bac1ca;cursor:pointer;padding:0}
+.reset svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.reset:hover{color:#fff;border-color:#acb5bf}.reset:focus-visible{outline:2px solid #f4d28b;outline-offset:4px}.board:focus{outline:none}
+.board{display:block;width:100%;height:100%;aspect-ratio:3/2;touch-action:none;user-select:none;cursor:url("../images/knife-cursor.png") 9 3,crosshair;overflow:visible}
+.board{box-shadow:0 0 0 2px #f4f0e6;border-radius:2px}
+.board.dragging{cursor:grabbing}.board.broken{cursor:grab}.board.broken.dragging{cursor:grabbing}
+.board.no-cuts{cursor:grab}.board.no-cuts.dragging{cursor:grabbing}
+.board.face-hover,.board.broken.face-hover{cursor:pointer}.board.dragging.face-hover{cursor:grabbing}
+.board.locked,.board.locked.face-hover,.board.locked .face-target,.board.locked .face-hit{cursor:default}
+.face-target{cursor:pointer}.face-target > :not(.face-hit){pointer-events:none}.face-hit{pointer-events:all}
+.face-shake{transform-box:fill-box;transform-origin:center;animation:face-shake .38s ease-in-out}
+.damage-image{transform-box:fill-box;transform-origin:center;animation:damage-hit .48s ease-out forwards;pointer-events:none}
+.returning-piece{pointer-events:none;transform-box:view-box;transform-origin:var(--cx) var(--cy);animation:return-piece .52s ease-out forwards}
+.clear-burst{pointer-events:none;transform-box:fill-box;transform-origin:center;animation:clear-burst .85s ease-out both}
+.clear-ring{pointer-events:none;transform-box:fill-box;transform-origin:center;animation:clear-ring .75s ease-out both}
+@keyframes face-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}42%{transform:translateX(7px)}64%{transform:translateX(-4px)}82%{transform:translateX(2px)}}
+@keyframes damage-hit{0%{opacity:1;transform:scale(.5)}30%{opacity:1;transform:scale(1.12)}100%{opacity:0;transform:scale(1.3)}}
+@keyframes return-piece{0%{transform:translate(var(--dx),var(--dy)) scale(.24)}100%{transform:translate(0,0) scale(1)}}
+@keyframes clear-burst{0%{opacity:0;transform:scale(.45)}18%{opacity:1;transform:scale(1)}60%{opacity:.85;transform:scale(1.08)}100%{opacity:0;transform:scale(1.2)}}
+@keyframes clear-ring{0%{opacity:0;transform:scale(.75)}25%{opacity:.8}100%{opacity:0;transform:scale(1.3)}}
+.congrats{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:#1e2430e8;color:#76dfd0;cursor:default;pointer-events:auto;animation:congrats-in .75s ease-out .65s both}
+.congrats[hidden]{display:none}.congrats-label{font-size:clamp(24px,5vw,54px);font-weight:900;letter-spacing:.025em;white-space:nowrap;text-shadow:0 0 25px #76dfd085}
+
+.knife-break{--knife-art:url("../images/knife-break.png");position:fixed;inset:0;z-index:4;display:grid;place-items:center;background:#1e2430b3;pointer-events:auto;animation:break-backdrop 1.05s ease-in-out both}
+.knife-break[hidden]{display:none}.knife-break-art{position:relative;width:192px;height:192px;filter:drop-shadow(0 13px 12px #0008)}
+.knife-half{position:absolute;inset:0;background-image:var(--knife-art);background-size:192px 192px;background-repeat:no-repeat}
+.knife-half.blade{clip-path:polygon(0 0,92% 0,0 92%);animation:blade-fall 1.05s ease-out both}
+.knife-half.handle{clip-path:polygon(92% 0,100% 0,100% 100%,0 100%,0 92%);animation:handle-fall 1.05s ease-out both}
+.break-spark{position:absolute;left:50%;top:47%;color:#fff6da;font-size:32px;line-height:1;transform:translate(-50%,-50%);animation:spark-flash 1.05s ease-out both}
+@keyframes break-backdrop{0%,100%{opacity:0}12%,80%{opacity:1}}
+@keyframes blade-fall{0%,18%{transform:translate(0,0) rotate(0)}62%,100%{transform:translate(-30px,-34px) rotate(-18deg)}}
+@keyframes handle-fall{0%,18%{transform:translate(0,0) rotate(0)}62%,100%{transform:translate(31px,35px) rotate(18deg)}}
+@keyframes spark-flash{0%,18%,100%{opacity:0;scale:.2}30%{opacity:1;scale:1.3}52%{opacity:0;scale:1.8}}
+@keyframes congrats-in{0%{opacity:0;background:#76dfd020}35%{opacity:1;background:#76dfd03b}100%{opacity:1;background:#1e2430e8}}
+@media(max-width:600px){.game{padding:16px 5px}.hud{padding:0 12px}.stage{font-size:24px}.stage small{font-size:12px}.reset{width:38px;height:38px}.reset svg{width:22px;height:22px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.knife-half.blade{transform:translate(-30px,-34px) rotate(-18deg)}.knife-half.handle{transform:translate(31px,35px) rotate(18deg)}.break-spark,.damage-image,.clear-burst,.clear-ring{opacity:0}}
