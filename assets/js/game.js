@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const N_VALUES=[1,2,2,2,4],M_VALUES=[1,1,2,3,5];
+const N_VALUES=[1,2,3,2,4],M_VALUES=[1,2,4,3,5];
 const stages=N_VALUES.map((n,i)=>({n,m:M_VALUES[i]}));
 // Face order: upper left, lower left, upper right, lower right.
 // Each piece follows the original ring clockwise; the last one wraps past 12 o'clock.
