@@ -40,7 +40,6 @@ function minimumCutsWithInitialPieces({n,m,initialPieces}){
 }
 const S=stages.reduce((sum,stage)=>sum+(stage.initialPieces?minimumCutsWithInitialPieces(stage):minimumCuts(stage.n,stage.m)),0);
 const colors=['#f4ce82','#e99da9','#9ac58e','#89bce0','#b6a3df','#edb079','#75cfc5','#d991bc','#bfc980','#95a7ea'];
-const HIT_IMAGE='assets/images/impact.png';
 const SHARE_TEXT='「Donuts」をクリアしました！\nhttps://ei1903.github.io/donuts/';
 const NS='http://www.w3.org/2000/svg',TWO=Math.PI*2,CY=300,OUT=217,IN=105;
 const FACE_LAYOUTS={1:[{x:100,y:300}],2:[{x:88,y:300},{x:812,y:300}],3:[{x:88,y:185},{x:88,y:415},{x:812,y:300}],4:[{x:88,y:185},{x:88,y:415},{x:812,y:185},{x:812,y:415}]};
@@ -75,24 +74,24 @@ function local(e){const box=$('board').getBoundingClientRect();return{x:(e.clien
 function nearest(p){const x=p.x-donutX(),y=p.y-CY,r=Math.hypot(x,y),n=slotCount();if(n===0||r<28||r>290)return null;const a=(Math.atan2(x,-y)+TWO)%TWO;return Math.round(a/TWO*n)%n}
 function pieceAt(p){const x=p.x-donutX(),y=p.y-CY,r=Math.hypot(x,y);if(r<IN-10||r>OUT+17)return null;const n=cellCount(),a=(Math.atan2(x,-y)+TWO)%TWO,cell=a/TWO*n;return currentPieces().find(piece=>{let v=cell;if(v<piece.start)v+=n;return v>=piece.start&&v<piece.end&&!eaten.has(piece.id)&&!returning.has(piece.id)})||null}
 function faceAt(p){return faces().findIndex(face=>Math.hypot(p.x-face.x,p.y-face.y)<83)}
-function impact(faceIndex,hit){clearTimeout(shakeTimer);shakingFace=faceIndex;drawPeople();shakeTimer=setTimeout(()=>{shakingFace=null;drawPeople()},400);make('image',{href:HIT_IMAGE,x:hit.x-32,y:hit.y-30,width:64,height:60,'class':'damage-image'},$('effects'))}
+function impact(faceIndex){clearTimeout(shakeTimer);shakingFace=faceIndex;drawPeople();shakeTimer=setTimeout(()=>{shakingFace=null;drawPeople()},400)}
 function samePattern(a,b){if(a.end-a.start!==b.end-b.start)return false;const {n}=stages[level],total=cellCount();for(let i=0;i<a.end-a.start;i++)if(Math.floor(((a.start+i)%total)/n)!==Math.floor(((b.start+i)%total)/n))return false;return true}
 function freeAt(start,length){const total=cellCount();for(const piece of currentPieces())if(!eaten.has(piece.id)||returning.has(piece.id)){for(let a=start;a<start+length;a++)for(let b=piece.start;b<piece.end;b++)if(a%total===b%total)return false}return true}
-function vomit(faceIndex,hit){
+function vomit(faceIndex){
  const last=history.findLastIndex(item=>item.who===faceIndex&&eaten.has(item.id));
- if(last<0){impact(faceIndex,hit);return}
+ if(last<0){impact(faceIndex);return}
  const source=currentPieces().find(p=>p.id===history[last].id);
  const length=source?.end-source?.start;
  let target=null;
  if(source&&!returning.has(source.id))for(let start=0;start<cellCount();start++){const candidate={start,end:start+length};if(samePattern(source,candidate)&&freeAt(start,length)){target=candidate;break}}
- if(!target){impact(faceIndex,hit);return}
+ if(!target){impact(faceIndex);return}
  history.splice(last,1);eaten.delete(source.id);source.start=target.start;source.end=target.end;
  returning.add(source.id);
  if(locked&&finished){clearTimeout(timer);locked=false;finished=false;$('board').classList.remove('win');$('congrats').hidden=true;$('celebration').replaceChildren()}
  draw();
  const mouth=faces()[faceIndex],origin=point(angle((target.start+target.end)/2),(IN+OUT)/2);
  const ghost=drawPiece(source,cuts.length>=1,$('effects'));ghost.setAttribute('class','returning-piece');ghost.setAttribute('style',`--dx:${mouth.x-origin[0]}px;--dy:${mouth.y+32-origin[1]}px;--cx:${origin[0]}px;--cy:${origin[1]}px`);
- impact(faceIndex,hit);
+ impact(faceIndex);
  const returnTimer=setTimeout(()=>{returnTimers.delete(returnTimer);ghost.remove();returning.delete(source.id);draw()},520);returnTimers.add(returnTimer)
 }
 function burstFaces(){const layer=$('celebration');layer.replaceChildren();for(const face of faces()){make('circle',{cx:face.x,cy:face.y,r:61,fill:'none',stroke:'#9bd9b6','stroke-width':3,'class':'clear-ring'},layer);const burst=make('g',{'class':'clear-burst'},layer);for(let i=0;i<10;i++){const a=i*TWO/10,dx=Math.cos(a),dy=Math.sin(a);make('line',{x1:face.x+dx*67,y1:face.y+dy*67,x2:face.x+dx*81,y2:face.y+dy*81,stroke:i%2?'#f4ce82':'#9bd9b6','stroke-width':3.5,'stroke-linecap':'round'},burst)}}}
@@ -102,7 +101,7 @@ function start(n){clearTimeout(timer);clearTimeout(shakeTimer);for(const t of re
 const board=$('board');board.addEventListener('pointermove',e=>{if(locked)return;const p=local(e);board.classList.toggle('face-hover',faceAt(p)>=0);if(down){const dx=p.x-down.p.x,dy=p.y-down.p.y;if(!drag&&down.piece&&Math.hypot(dx,dy)>10){drag={id:down.piece.id,dx,dy};board.classList.add('dragging')}if(drag){drag.dx=dx;drag.dy=dy;const face=faceAt(p);hoverFace=face<0?null:face;draw()}return}const next=nearest(p);if(next!==hover){hover=next;drawGuide()}});
 board.addEventListener('pointerleave',()=>{if(!down){board.classList.remove('face-hover');hover=null;drawGuide()}});
 board.addEventListener('pointerdown',e=>{if(e.button!==0||breaking||locked)return;const p=local(e),face=faceAt(p);board.classList.toggle('face-hover',face>=0);if(face>=0){e.preventDefault();board.setPointerCapture?.(e.pointerId);down={p,face};return}const piece=pieceAt(p);if(piece||canCut(nearest(p))){e.preventDefault();board.setPointerCapture?.(e.pointerId);down={p,piece}}});
-board.addEventListener('pointerup',e=>{if(e.button!==0||!down)return;e.preventDefault();const p=local(e);board.classList.toggle('face-hover',faceAt(p)>=0);if(down.face!==undefined){const face=down.face;down=null;if(faceAt(p)===face)vomit(face,p);return}if(drag){const face=faceAt(p);if(face>=0){eaten.set(drag.id,face);history.push({id:drag.id,who:face});hoverFace=null;drag=null;down=null;board.classList.remove('dragging');draw();check();return}}else{const slot=nearest(p);down=null;cut(slot);return}down=null;drag=null;hoverFace=null;board.classList.remove('dragging');draw()});
+board.addEventListener('pointerup',e=>{if(e.button!==0||!down)return;e.preventDefault();const p=local(e);board.classList.toggle('face-hover',faceAt(p)>=0);if(down.face!==undefined){const face=down.face;down=null;if(faceAt(p)===face)vomit(face);return}if(drag){const face=faceAt(p);if(face>=0){eaten.set(drag.id,face);history.push({id:drag.id,who:face});hoverFace=null;drag=null;down=null;board.classList.remove('dragging');draw();check();return}}else{const slot=nearest(p);down=null;cut(slot);return}down=null;drag=null;hoverFace=null;board.classList.remove('dragging');draw()});
 board.addEventListener('pointercancel',()=>{down=null;drag=null;hoverFace=null;board.classList.remove('dragging');draw()});
 board.addEventListener('contextmenu',e=>e.preventDefault());
 board.addEventListener('keydown',e=>{if(locked||breaking)return;const n=slotCount();if(n===0)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();hover=hover===null?0:(hover+(e.key==='ArrowRight'?1:n-1))%n;drawGuide()}else if(e.key==='Enter'||e.key===' '){e.preventDefault();cut(hover)}});
