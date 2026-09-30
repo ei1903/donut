@@ -40,7 +40,7 @@ function minimumCutsWithInitialPieces({n,m,initialPieces}){
 }
 const S=stages.reduce((sum,stage)=>sum+(stage.initialPieces?minimumCutsWithInitialPieces(stage):minimumCuts(stage.n,stage.m)),0);
 const colors=['#f4ce82','#e99da9','#9ac58e','#89bce0','#b6a3df','#edb079','#75cfc5','#d991bc','#bfc980','#95a7ea'];
-const SHARE_TEXT='「Donuts」をクリアしました！\nhttps://ei1903.github.io/donuts/';
+const SHARE_TEXT='「Donuts」をクリアしました！\n\n#Web謎\nhttps://ei1903.github.io/donuts/';
 const NS='http://www.w3.org/2000/svg',TWO=Math.PI*2,CY=300,OUT=217,IN=105;
 const FACE_LAYOUTS={1:[{x:100,y:300}],2:[{x:88,y:300},{x:812,y:300}],3:[{x:88,y:185},{x:88,y:415},{x:812,y:300}],4:[{x:88,y:185},{x:88,y:415},{x:812,y:185},{x:812,y:415}]};
 function faces(){return FACE_LAYOUTS[stages[level].n]}
